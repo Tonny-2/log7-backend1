@@ -1,23 +1,23 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import { connectDB } from "./config/db.js";
-import authRoutes from "./Router/auth.js";
+import dotenv from "dotenv";
+import connectDB from "./config/db.js";
+import auth from "./router/auth.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use(
-    cors({
+cors({
         origin: process.env.CLIENT_URL,
         credentials: true,
     })
-);
-app.use(express.json());
 
-app.use("/auth", authRoutes);
-app.use("/api/auth", authRoutes);
+app.use(express.json({
+    limit: "100mb",
+}));
+app.use("/auth", auth);
+app.use("/api/auth", auth);
 
 
 app.get("/", (req, res) => {
